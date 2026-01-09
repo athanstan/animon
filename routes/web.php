@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Anime\Show as AnimeShow;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
@@ -10,6 +11,10 @@ use Laravel\Fortify\Features;
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
+
+Route::get('/anime/{id}', AnimeShow::class)
+    ->where('id', '[0-9]+')
+    ->name('anime.show');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
