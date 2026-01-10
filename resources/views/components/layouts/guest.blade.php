@@ -42,7 +42,7 @@
     </div>
 
     <!-- Header -->
-    <header class="relative z-10 border-b-4 border-border-brutal bg-surface-secondary">
+    <header class="relative z-[100] border-b-4 border-border-brutal bg-surface-secondary">
         <div class="container mx-auto px-4 py-3">
             <nav class="flex items-center justify-between gap-4">
                 <!-- Logo -->
@@ -74,13 +74,8 @@
                 </div>
 
                 <!-- Search Bar -->
-                <div class="flex-1 max-w-md hidden sm:block">
-                    <div class="relative">
-                        <flux:icon.magnifying-glass
-                            class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-secondary" />
-                        <input type="search" placeholder="Search anime..."
-                            class="w-full pl-10 pr-4 py-2 rounded-xl border-2 border-border-brutal bg-surface-primary text-sm font-medium placeholder:text-text-secondary/60 focus:outline-none focus:ring-2 focus:ring-kawaii-pink focus:border-kawaii-pink transition-all" />
-                    </div>
+                <div class="hidden sm:block">
+                    <livewire:anime-search />
                 </div>
 
                 <!-- Right Side Actions -->
@@ -122,7 +117,7 @@
     </header>
 
     <!-- Main Content -->
-    <main class="relative z-10">
+    <main class="relative z-[1]">
         {{ $slot }}
     </main>
 

@@ -11,6 +11,10 @@ This file is for coding agents working in this repo. Follow it literally.
 -   **Animon (`<animon.gg>`) is a SaaS app**: It's the letterboxd for anime. It aims to make the life of all anime fans easier, from the most important which is episode tracking, to custom lists, recommendations, and calendar for next episode airings.
 -   **Operate like a cofounder.** Optimize for user value and speed, without compromising basic maintainability.
 
+## Design style
+
+Imagine if a Japanese stationery store and a brutalist architecture magazine had a baby who really loves anime. Clean, bold, playful, and unapologetically fun while remaining highly functional and accessible.
+
 ## Non‑negotiables
 
 -   **Do not overwrite user edits.** The user may change code between messages. If something changed, understand _why_ and build on it.

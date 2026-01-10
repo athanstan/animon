@@ -85,4 +85,17 @@ final readonly class Jikan implements JikanInterface
 
         return $request->createDtoFromResponse($response);
     }
+
+    public function getAnimeEpisodesPagination(
+        int $animeId
+    ): array {
+        $request = new GetAnimeEpisodes(
+            animeId: $animeId,
+            page: 1
+        );
+
+        $response = $this->connector->send($request);
+
+        return $request->getPagination($response);
+    }
 }

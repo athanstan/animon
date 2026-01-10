@@ -11,24 +11,27 @@ use App\Exceptions\Integrations\Jikan\JikanException;
 use App\Exceptions\Integrations\Jikan\NotFoundException;
 use App\Exceptions\Integrations\Jikan\RateLimitException;
 use App\Interfaces\JikanInterface;
+use App\Models\Anime;
 use Illuminate\Support\Facades\Cache;
 use Livewire\Component;
 
 final class Show extends Component
 {
+    public Anime $anime;
     public int $animeId;
 
-    public function mount(int $id): void
+    public function mount(Anime $anime): void
     {
-        $this->animeId = $id;
+        $this->anime = $anime;
+        $this->animeId = $anime->mal_id;
     }
 
-    public function getAnimeProperty(): AnimeDTO
+    public function getAnimeDetailsProperty(): AnimeDTO
     {
         try {
             return Cache::remember(
                 "anime_{$this->animeId}",
-                now()->addHours(6),
+                now()->addWeek(),
                 fn() => app(JikanInterface::class)->getAnimeById($this->animeId)
             );
         } catch (NotFoundException $e) {
@@ -45,7 +48,7 @@ final class Show extends Component
         try {
             return Cache::remember(
                 "anime_{$this->animeId}_episodes",
-                now()->addHours(1),
+                now()->addDay(),
                 fn() => app(JikanInterface::class)->getAnimeEpisodes($this->animeId)
             );
         } catch (NotFoundException $e) {
@@ -65,7 +68,7 @@ final class Show extends Component
     public function render()
     {
         return view('livewire.anime.show', [
-            'anime' => $this->anime,
+            'animeDetails' => $this->animeDetails,
             'episodes' => $this->episodes,
             'nextAiringEpisode' => $this->nextAiringEpisode,
         ])->layout('components.layouts.guest', [

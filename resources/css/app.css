@@ -250,6 +250,31 @@ select:focus[data-flux-control] {
     .star-filled { color: #FFD700; }
     .star-empty { color: #E0E0E0; }
     .dark .star-empty { color: #444; }
+
+    /* Kawaii Scrollbar */
+    .scrollbar-kawaii {
+        scrollbar-width: thin;
+        scrollbar-color: var(--color-kawaii-pink) var(--color-surface-primary);
+    }
+
+    .scrollbar-kawaii::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .scrollbar-kawaii::-webkit-scrollbar-track {
+        background: var(--color-surface-primary);
+        border-radius: 10px;
+    }
+
+    .scrollbar-kawaii::-webkit-scrollbar-thumb {
+        background: var(--color-kawaii-pink);
+        border-radius: 10px;
+        border: 2px solid var(--color-surface-primary);
+    }
+
+    .scrollbar-kawaii::-webkit-scrollbar-thumb:hover {
+        background: var(--color-kawaii-coral);
+    }
 }
 
 /* ==========================================================================
@@ -265,4 +290,11 @@ select:focus[data-flux-control] {
 @keyframes sparkle {
     0%, 100% { opacity: 1; transform: scale(1); }
     50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+@keyframes float-bg {
+    0%, 100% { transform: translate(0, 0) rotate(var(--rotation, 0deg)) scale(1); }
+    25% { transform: translate(15px, -20px) rotate(calc(var(--rotation, 0deg) + 5deg)) scale(1.05); }
+    50% { transform: translate(-10px, 15px) rotate(calc(var(--rotation, 0deg) - 5deg)) scale(0.98); }
+    75% { transform: translate(20px, 10px) rotate(calc(var(--rotation, 0deg) + 3deg)) scale(1.02); }
 }

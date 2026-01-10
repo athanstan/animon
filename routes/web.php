@@ -12,8 +12,7 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::get('/anime/{id}', AnimeShow::class)
-    ->where('id', '[0-9]+')
+Route::get('/anime/{anime:slug}', AnimeShow::class)
     ->name('anime.show');
 
 Route::view('dashboard', 'dashboard')

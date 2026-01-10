@@ -34,4 +34,8 @@ interface JikanInterface
         int $animeId,
         int $page = 1
     ): EpisodeCollection;
+
+    public function getAnimeEpisodesPagination(
+        int $animeId
+    ): array;
 }

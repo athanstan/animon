@@ -1,11 +1,22 @@
 {{--
     Anime card component for displaying anime in grids.
 --}}
-@props(['title', 'score', 'episodes', 'image', 'color' => 'bg-kawaii-pink', 'rank' => null, 'status' => null, 'malId' => null])
+@props(['title', 'score', 'episodes', 'image', 'color' => 'bg-kawaii-pink', 'rank' => null, 'status' => null, 'malId' => null, 'slug' => null])
+
+@php
+    $url = '#';
+    if ($slug) {
+        $url = route('anime.show', $slug);
+    } elseif ($malId) {
+        // Fallback: generate slug from title if not provided
+        $anime = \App\Models\Anime::where('mal_id', $malId)->first();
+        $url = $anime ? route('anime.show', $anime->slug) : '#';
+    }
+@endphp
 
 <article class="anime-card rounded-xl overflow-hidden group cursor-pointer bg-surface-secondary">
     <a
-        href="{{ $malId ? route('anime.show', $malId) : '#' }}"
+        href="{{ $url }}"
         class="block"
     >
         <!-- Image Container -->

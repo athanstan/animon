@@ -31,9 +31,6 @@ final class GetAnimeEpisodes extends Request
         ];
     }
 
-    /**
-     * Map the response to a Collection of EpisodeDTO objects.
-     */
     public function createDtoFromResponse(Response $response): EpisodeCollection
     {
         $episodes = $response->collect('data')
@@ -42,9 +39,6 @@ final class GetAnimeEpisodes extends Request
         return EpisodeCollection::make($episodes)->ensure(EpisodeDTO::class);
     }
 
-    /**
-     * Get pagination info from response.
-     */
     public function getPagination(Response $response): array
     {
         return $response->json('pagination') ?? [

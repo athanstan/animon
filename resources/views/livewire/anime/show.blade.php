@@ -2,7 +2,7 @@
     Anime detail page - inspired by Letterboxd's film pages.
 --}}
 
-<div>
+<div x-data="{ showGoToTop: false }" x-init="window.addEventListener('scroll', () => { showGoToTop = window.scrollY > 500 })" x-cloak>
     <!-- Hero Section with Backdrop -->
     <section class="relative">
         <!-- Gradient Backdrop -->
@@ -16,12 +16,12 @@
                 <div class="flex-shrink-0 flex flex-col items-center lg:items-start gap-4">
                     <!-- Poster -->
                     <div class="anime-card rounded-2xl overflow-hidden w-64 md:w-72">
-                        <img src="{{ $anime->getLargeImageUrl() }}" alt="Poster for {{ $anime->title }}"
+                        <img src="{{ $animeDetails->getLargeImageUrl() }}" alt="Poster for {{ $animeDetails->title }}"
                             class="w-full aspect-[2/3] object-cover" />
                     </div>
 
                     <!-- Stats Bar -->
-                    <x-anime.stats-bar :members="$anime->getFormattedMembers()" :favorites="$anime->getFormattedFavorites()" :rank="$anime->rank" />
+                    <x-anime.stats-bar :members="$animeDetails->getFormattedMembers()" :favorites="$animeDetails->getFormattedFavorites()" :rank="$animeDetails->rank" />
 
                 </div>
 
@@ -31,72 +31,101 @@
                     <div class="mb-6">
                         <h1
                             class="text-2xl md:text-3xl lg:text-4xl font-display font-black leading-tight mb-2 text-center md:text-left">
-                            {{ $anime->title }}
+                            {{ $animeDetails->title }}
                         </h1>
 
-                        @if ($anime->titleEnglish && $anime->titleEnglish !== $anime->title)
+                        @if ($animeDetails->titleEnglish && $animeDetails->titleEnglish !== $animeDetails->title)
                             <flux:text size="lg" class="text-text-secondary mb-1">
-                                {{ $anime->titleEnglish }}
+                                {{ $animeDetails->titleEnglish }}
                             </flux:text>
                         @endif
 
-                        @if ($anime->titleJapanese)
+                        @if ($animeDetails->titleJapanese)
                             <flux:text size="base" class="text-text-secondary/70 font-kawaii">
-                                {{ $anime->titleJapanese }}
+                                {{ $animeDetails->titleJapanese }}
                             </flux:text>
                         @endif
 
                         <!-- Meta Line -->
                         <div class="flex flex-wrap items-center gap-3 mt-4 text-sm">
-                            @if ($anime->year)
+                            @if ($animeDetails->year)
                                 <flux:link href="#" class="font-bold hover:text-kawaii-coral transition-colors">
-                                    {{ $anime->year }}
+                                    {{ $animeDetails->year }}
                                 </flux:link>
                             @endif
 
-                            @if ($anime->type)
+                            @if ($animeDetails->type)
                                 <span
                                     class="px-2 py-1 rounded-md font-semibold text-xs border-2 border-border-brutal bg-kawaii-sky">
-                                    {{ $anime->type }}
+                                    {{ $animeDetails->type }}
                                 </span>
                             @endif
 
-                            @if ($anime->episodes)
+                            @if ($animeDetails->episodes)
                                 <span class="text-text-secondary">
-                                    {{ $anime->episodes }} {{ Str::plural('episode', $anime->episodes) }}
+                                    {{ $animeDetails->episodes }} {{ Str::plural('episode', $animeDetails->episodes) }}
                                 </span>
                             @endif
 
-                            @if ($anime->duration)
-                                <span class="text-text-secondary">• {{ $anime->duration }}</span>
-                            @endif
-                        </div>
-
-                        <!-- Genres & Studios -->
-                        <div class="flex flex-wrap items-center gap-4 mt-4">
-                            @if (count($anime->genres) > 0)
-                                <div class="flex flex-wrap items-center gap-2">
-                                    @foreach ($anime->genres as $genre)
-                                        <a href="#"
-                                            class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-kawaii-pink hover:bg-kawaii-coral transition-colors">
-                                            {{ $genre['name'] }}
-                                        </a>
-                                    @endforeach
-                                </div>
+                            @if ($animeDetails->duration)
+                                <span class="text-text-secondary">• {{ $animeDetails->duration }}</span>
                             @endif
 
-                            @if (count($anime->studios) > 0)
+                            @if (count($animeDetails->studios) > 0)
+                                <span class="text-text-secondary">•</span>
                                 <div class="flex flex-wrap items-center gap-2">
                                     <span class="text-text-secondary text-sm">by</span>
-                                    @foreach ($anime->studios as $studio)
+                                    @foreach ($animeDetails->studios as $studio)
                                         <a href="#"
-                                            class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-kawaii-mint hover:bg-kawaii-sky transition-colors">
+                                            class="font-semibold hover:text-kawaii-coral transition-colors">
                                             {{ $studio['name'] }}
                                         </a>
+                                        @if (!$loop->last)
+                                            <span class="text-text-secondary">,</span>
+                                        @endif
                                     @endforeach
                                 </div>
                             @endif
                         </div>
+
+                        <!-- Genres & Themes -->
+                        @if (count($animeDetails->genres) > 0 || count($animeDetails->themes) > 0)
+                            <div class="mt-4 space-y-3">
+                                @if (count($animeDetails->genres) > 0)
+                                    <div>
+                                        <span
+                                            class="text-xs font-bold text-text-secondary/70 uppercase tracking-wide mb-2 block">
+                                            Genres
+                                        </span>
+                                        <div class="flex flex-wrap gap-2">
+                                            @foreach ($animeDetails->genres as $genre)
+                                                <a href="#"
+                                                    class="btn-kawaii px-3 py-1.5 rounded-lg text-sm font-semibold bg-kawaii-pink hover:bg-kawaii-coral transition-colors">
+                                                    {{ $genre['name'] }}
+                                                </a>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endif
+
+                                @if (count($animeDetails->themes) > 0)
+                                    <div>
+                                        <span
+                                            class="text-xs font-bold text-text-secondary/70 uppercase tracking-wide mb-2 block">
+                                            Themes
+                                        </span>
+                                        <div class="flex flex-wrap gap-2">
+                                            @foreach ($animeDetails->themes as $theme)
+                                                <a href="#"
+                                                    class="btn-kawaii px-3 py-1.5 rounded-lg text-sm font-semibold bg-kawaii-lavender hover:bg-kawaii-sage transition-colors">
+                                                    {{ $theme['name'] }}
+                                                </a>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                        @endif
                     </div>
 
                     <!-- Synopsis & Background Tabs -->
@@ -111,7 +140,7 @@
                                 Synopsis
                             </button>
 
-                            @if ($anime->background)
+                            @if ($animeDetails->background)
                                 <button type="button" @click="activeTab = 'background'"
                                     :class="activeTab === 'background' ? 'bg-kawaii-pink text-text-primary' :
                                         'bg-surface-secondary text-text-secondary hover:bg-surface-secondary/80'"
@@ -126,23 +155,23 @@
                         <div x-show="activeTab === 'synopsis'" x-transition:enter="transition ease-out duration-200"
                             x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
                             <flux:text class="text-text-secondary leading-relaxed max-w-3xl">
-                                {{ $anime->synopsis ?? 'No synopsis available.' }}
+                                {{ $animeDetails->synopsis ?? 'No synopsis available.' }}
                             </flux:text>
                         </div>
 
-                        @if ($anime->background)
+                        @if ($animeDetails->background)
                             <div x-show="activeTab === 'background'"
                                 x-transition:enter="transition ease-out duration-200"
                                 x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
                                 <flux:text class="text-text-secondary leading-relaxed max-w-3xl">
-                                    {{ $anime->background }}
+                                    {{ $animeDetails->background }}
                                 </flux:text>
                             </div>
                         @endif
                     </div>
 
                     <!-- Trailer -->
-                    @if ($anime->getTrailerEmbedUrl())
+                    @if ($animeDetails->getTrailerEmbedUrl())
                         <div class="mb-8">
                             <flux:heading size="sm" class="font-bold mb-3 text-text-secondary">
                                 🎬 Trailer
@@ -150,9 +179,9 @@
 
                             <div class="brutal-card rounded-2xl overflow-hidden bg-surface-secondary max-w-2xl">
                                 <div class="aspect-video">
-                                    <iframe src="{{ $anime->getTrailerEmbedUrl() }}"
-                                        title="Trailer for {{ $anime->title }}" class="w-full h-full" allowfullscreen
-                                        loading="lazy"></iframe>
+                                    <iframe src="{{ $animeDetails->getTrailerEmbedUrl() }}"
+                                        title="Trailer for {{ $animeDetails->title }}" class="w-full h-full"
+                                        allowfullscreen loading="lazy"></iframe>
                                 </div>
                             </div>
                         </div>
@@ -162,7 +191,7 @@
 
                 <!-- Sidebar Column -->
                 <div class="w-full lg:w-80 flex-shrink-0 space-y-4">
-                    <x-anime.sidebar-card :anime="$anime" />
+                    <x-anime.sidebar-card :anime="$animeDetails" />
 
                     @if ($nextAiringEpisode)
                         <x-anime.next-airing-card :episode="$nextAiringEpisode" />
@@ -172,55 +201,26 @@
         </div>
     </section>
 
-    <!-- Themes Section -->
-    @if (count($anime->themes) > 0)
-        <section class="py-8 border-t-4 border-border-brutal bg-surface-secondary/50">
-            <div class="container mx-auto px-4">
-                <div>
-                    <flux:heading size="sm" class="font-bold mb-3 text-text-secondary">Themes</flux:heading>
-                    <div class="flex flex-wrap gap-2">
-                        @foreach ($anime->themes as $theme)
-                            <a href="#"
-                                class="btn-kawaii px-3 py-1.5 rounded-lg text-sm font-semibold bg-kawaii-lavender hover:bg-kawaii-sage transition-colors">
-                                {{ $theme['name'] }}
-                            </a>
-                        @endforeach
-                    </div>
-                </div>
-            </div>
-        </section>
-    @endif
-
     <!-- Episodes Section -->
-    @if ($episodes->isNotEmpty())
-        <section class="py-12">
-            <div class="container mx-auto px-4">
-                <div class="flex items-center justify-between mb-8">
-                    <flux:heading size="xl" class="section-title font-display font-black">
-                        📺 Episodes
-                    </flux:heading>
+    <section class="py-12 border-t-4 border-border-brutal bg-surface-secondary/30">
+        <div class="container mx-auto px-4">
+            <flux:heading size="xl" class="section-title font-display font-black mb-8">
+                📺 Episodes
+            </flux:heading>
 
-                    <div class="flex items-center gap-4 text-sm text-text-secondary">
-                        <span>{{ $episodes->count() }} episodes</span>
-
-                        @if ($episodes->fillers()->count() > 0)
-                            <span class="flex items-center gap-1">
-                                <span class="w-2 h-2 rounded-full bg-amber-400"></span>
-                                {{ $episodes->fillers()->count() }} filler
-                            </span>
-                        @endif
-
-                        @if ($episodes->recaps()->count() > 0)
-                            <span class="flex items-center gap-1">
-                                <span class="w-2 h-2 rounded-full bg-blue-400"></span>
-                                {{ $episodes->recaps()->count() }} recap
-                            </span>
-                        @endif
-                    </div>
-                </div>
-
-                <x-anime.episode-list :episodes="$episodes" />
+            <div class="max-w-4xl">
+                <livewire:anime.episodes :animeId="$animeId" lazy />
             </div>
-        </section>
-    @endif
+        </div>
+    </section>
+
+    <!-- Go to Top Button -->
+    <button x-show="showGoToTop" x-transition:enter="transition ease-out duration-200"
+        x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0"
+        x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0"
+        x-transition:leave-end="opacity-0 translate-y-4" @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
+        class="fixed bottom-8 right-8 z-50 btn-kawaii bg-kawaii-pink p-4 rounded-full shadow-brutal-lg hover:scale-110 transition-transform"
+        aria-label="Go to top">
+        <flux:icon.arrow-up class="w-6 h-6" aria-hidden="true" />
+    </button>
 </div>
