@@ -1,6 +1,8 @@
 <?php
 
 use App\Livewire\Anime\Show as AnimeShow;
+use App\Livewire\Lists\Create as ListsCreate;
+use App\Livewire\Lists\Edit as ListsEdit;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
@@ -36,4 +38,7 @@ Route::middleware(['auth'])->group(function () {
             ),
         )
         ->name('two-factor.show');
+
+    Route::get('list/new', ListsCreate::class)->name('lists.create');
+    Route::get('list/{list:slug}/edit', ListsEdit::class)->name('lists.edit');
 });

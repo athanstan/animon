@@ -8,11 +8,15 @@ use App\Enums\AnimeRating;
 use App\Enums\AnimeSeason;
 use App\Enums\AnimeStatus;
 use App\Enums\AnimeType;
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Str;
 
 final class Anime extends Model
 {
+    use Sluggable;
+
     protected $fillable = [
         'mal_id',
         'slug',
@@ -44,27 +48,24 @@ final class Anime extends Model
         ];
     }
 
-    public function getRouteKeyName(): string
+    /**
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
+     */
+    public function sluggable(): array
     {
-        return 'slug';
+        return [
+            'slug' => [
+                'source' => 'title'
+            ]
+        ];
     }
 
-    protected static function boot(): void
+    public function animeLists(): BelongsToMany
     {
-        parent::boot();
-
-        static::creating(function (Anime $anime) {
-            if (empty($anime->slug)) {
-                $anime->slug = Str::slug($anime->title);
-
-                // Ensure uniqueness
-                $originalSlug = $anime->slug;
-                $counter = 1;
-                while (static::where('slug', $anime->slug)->exists()) {
-                    $anime->slug = $originalSlug . '-' . $counter;
-                    $counter++;
-                }
-            }
-        });
+        return $this->belongsToMany(AnimeList::class, 'anime_anime_lists')
+            ->withPivot('order')
+            ->orderBy('order');
     }
 }

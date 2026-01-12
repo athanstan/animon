@@ -6,16 +6,35 @@ use App\Exceptions\Integrations\Jikan\JikanException;
 use App\Exceptions\Integrations\Jikan\NotFoundException;
 use App\Exceptions\Integrations\Jikan\RateLimitException;
 use App\Exceptions\Integrations\Jikan\UnauthorizedException;
+use Illuminate\Support\Facades\Cache;
 use Saloon\Http\Connector;
 use Saloon\Http\Response;
+use Saloon\RateLimitPlugin\Limit;
+use Saloon\RateLimitPlugin\Traits\HasRateLimits;
 use Saloon\Traits\Plugins\AcceptsJson;
 use Saloon\Traits\Plugins\AlwaysThrowOnErrors;
 use Throwable;
+use Saloon\RateLimitPlugin\Contracts\RateLimitStore;
+use Saloon\RateLimitPlugin\Stores\LaravelCacheStore;
 
 class JikanConnector extends Connector
 {
     use AcceptsJson;
     use AlwaysThrowOnErrors;
+    use HasRateLimits;
+
+    protected function resolveLimits(): array
+    {
+        return [
+            Limit::allow(3)->everySeconds(1),
+            Limit::allow(60)->everyMinute(),
+        ];
+    }
+
+    protected function resolveRateLimitStore(): RateLimitStore
+    {
+        return new LaravelCacheStore(Cache::store(config('cache.default')));
+    }
 
     /**
      * The Base URL of the API

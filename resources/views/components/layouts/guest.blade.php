@@ -82,9 +82,66 @@
                 <div class="flex items-center gap-2">
                     @if (Route::has('login'))
                         @auth
-                            <flux:button :href="url('/dashboard')" variant="ghost" size="sm" class="font-bold">
-                                Dashboard
-                            </flux:button>
+                            <!-- Authenticated User Dropdown -->
+                            <div x-data="{ open: false }" class="relative">
+                                <button @click="open = !open" @click.away="open = false"
+                                    class="flex items-center gap-2 px-3 py-2 rounded-lg font-bold text-sm text-text-primary hover:bg-surface-primary/50 transition-colors"
+                                    aria-label="User menu">
+                                    <div
+                                        class="w-8 h-8 rounded-lg bg-kawaii-pink/20 border-2 border-border-brutal flex items-center justify-center font-black text-xs">
+                                        {{ auth()->user()->initials() }}
+                                    </div>
+                                    <span class="hidden sm:inline">{{ auth()->user()->name }}</span>
+                                    <flux:icon.chevron-down class="w-4 h-4" />
+                                </button>
+
+                                <div x-show="open" x-transition:enter="transition ease-out duration-150"
+                                    x-transition:enter-start="opacity-0 scale-95"
+                                    x-transition:enter-end="opacity-100 scale-100"
+                                    x-transition:leave="transition ease-in duration-100"
+                                    x-transition:leave-start="opacity-100 scale-100"
+                                    x-transition:leave-end="opacity-0 scale-95"
+                                    class="absolute right-0 mt-2 w-56 rounded-lg border-2 border-border-brutal bg-surface-secondary shadow-brutal overflow-hidden z-50"
+                                    x-cloak>
+                                    <div class="p-3 border-b-2 border-border-brutal">
+                                        <p class="font-bold text-sm text-text-primary truncate">{{ auth()->user()->name }}
+                                        </p>
+                                        <p class="text-xs text-text-secondary truncate">{{ auth()->user()->email }}</p>
+                                    </div>
+
+                                    <div class="py-1">
+                                        <a href="{{ route('dashboard') }}"
+                                            class="flex items-center gap-2 px-3 py-2 text-sm font-medium text-text-primary hover:bg-surface-primary transition-colors"
+                                            wire:navigate>
+                                            <flux:icon.home class="w-4 h-4" />
+                                            Dashboard
+                                        </a>
+                                        <a href="{{ route('profile.edit') }}"
+                                            class="flex items-center gap-2 px-3 py-2 text-sm font-medium text-text-primary hover:bg-surface-primary transition-colors"
+                                            wire:navigate>
+                                            <flux:icon.cog class="w-4 h-4" />
+                                            Settings
+                                        </a>
+                                        <a href="{{ route('appearance.edit') }}"
+                                            class="flex items-center gap-2 px-3 py-2 text-sm font-medium text-text-primary hover:bg-surface-primary transition-colors"
+                                            wire:navigate>
+                                            <flux:icon.swatch class="w-4 h-4" />
+                                            Appearance
+                                        </a>
+                                    </div>
+
+                                    <div class="border-t-2 border-border-brutal py-1">
+                                        <form method="POST" action="{{ route('logout') }}">
+                                            @csrf
+                                            <button type="submit"
+                                                class="w-full flex items-center gap-2 px-3 py-2 text-sm font-medium text-red-600 hover:bg-surface-primary transition-colors">
+                                                <flux:icon.arrow-right-start-on-rectangle class="w-4 h-4" />
+                                                Log Out
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                         @else
                             <a href="{{ route('login') }}"
                                 class="px-3 py-2 rounded-lg font-bold text-sm text-text-secondary hover:text-text-primary hover:bg-surface-primary/50 transition-colors hidden sm:block">

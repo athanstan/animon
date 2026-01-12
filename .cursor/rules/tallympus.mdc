@@ -93,3 +93,7 @@ When the html files are a bloated mess without component use and i need to scrol
 -   Import Pest global functions (e.g. `use function Pest\Laravel\actingAs;`).
 -   Avoid `$this` in Pest tests; prefer the equivalent global functions.
 -   Use Real-Time Facades if you need to mock something resolved from the container.
+
+## DANGER!
+
+-   **NEVER! Under NO Circumstances** run php artisan migrate:fresh --force
