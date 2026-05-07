@@ -9,13 +9,16 @@ use App\Enums\AnimeSeason;
 use App\Enums\AnimeStatus;
 use App\Enums\AnimeType;
 use Cviebrock\EloquentSluggable\Sluggable;
+use Database\Factories\AnimeFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/** @use HasFactory<AnimeFactory> */
 final class Anime extends Model
 {
-    use Sluggable;
+    use HasFactory, Sluggable;
 
     protected $fillable = [
         'mal_id',
@@ -50,16 +53,19 @@ final class Anime extends Model
 
     /**
      * Return the sluggable configuration array for this model.
-     *
-     * @return array
      */
     public function sluggable(): array
     {
         return [
             'slug' => [
-                'source' => 'title'
-            ]
+                'source' => 'title',
+            ],
         ];
+    }
+
+    public function episodes(): HasMany
+    {
+        return $this->hasMany(Episode::class);
     }
 
     public function animeLists(): BelongsToMany

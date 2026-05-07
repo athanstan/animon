@@ -9,8 +9,12 @@ use App\Models\Anime;
 use App\Models\AnimeList;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
+#[Layout('components.layouts.guest')]
+#[Title('Create New List - Anibaku')]
 final class Create extends Component
 {
     public string $title = '';
@@ -83,8 +87,6 @@ final class Create extends Component
 
     public function render(): View
     {
-        return view('livewire.lists.create')->layout('components.layouts.guest', [
-            'title' => 'Create New List - animon.gg',
-        ]);
+        return view('livewire.lists.create');
     }
 }

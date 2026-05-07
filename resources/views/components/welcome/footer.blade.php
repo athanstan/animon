@@ -10,7 +10,7 @@
                     <div class="brutal-card w-10 h-10 flex items-center justify-center rounded-lg bg-kawaii-pink">
                         <x-welcome.animon-mascot class="w-6 h-6" />
                     </div>
-                    <span class="font-display text-xl font-black">animon.gg</span>
+                    <span class="font-display text-xl font-black">Anibaku</span>
                 </flux:link>
                 <flux:text size="sm" class="text-text-secondary">
                     The ultimate anime tracking platform for passionate fans. Made with 💖 for otaku everywhere.
@@ -78,7 +78,7 @@
         <!-- Bottom Bar -->
         <div class="border-t-2 border-border-brutal pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
             <flux:text size="sm" class="text-text-secondary">
-                © {{ date('Y') }} animon.gg. All rights reserved. ✦
+                © {{ date('Y') }} Anibaku. All rights reserved. ✦
             </flux:text>
 
             <!-- Social Links -->

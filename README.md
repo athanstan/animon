@@ -1,8 +1,8 @@
-# 🎌 Animon
+# 🎌 Anibaku
 
 **Track your anime journey. Connect with friends. Never lose progress.**
 
-Animon is an anime tracking platform that lets users manage their watchlists, track episode progress, create custom showcase lists, and get real-time notifications when friends update their activity.
+Anibaku is an anime tracking platform that lets users manage their watchlists, track episode progress, create custom showcase lists, and get real-time notifications when friends update their activity.
 
 ![Laravel](https://img.shields.io/badge/Laravel-12.x-FF2D20?style=flat-square&logo=laravel&logoColor=white)
 ![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?style=flat-square&logo=php&logoColor=white)
@@ -86,8 +86,8 @@ Animon is an anime tracking platform that lets users manage their watchlists, tr
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/animon.git
-cd animon
+git clone https://github.com/yourusername/anibaku.git
+cd anibaku
 
 # Install PHP dependencies
 composer install
@@ -102,7 +102,7 @@ php artisan key:generate
 # DB_CONNECTION=pgsql
 # DB_HOST=127.0.0.1
 # DB_PORT=5432
-# DB_DATABASE=animon
+# DB_DATABASE=anibaku
 # DB_USERNAME=your_username
 # DB_PASSWORD=your_password
 

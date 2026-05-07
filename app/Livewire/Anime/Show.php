@@ -13,11 +13,17 @@ use App\Exceptions\Integrations\Jikan\RateLimitException;
 use App\Interfaces\JikanInterface;
 use App\Models\Anime;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\View\View;
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
+#[Layout('components.layouts.guest')]
+#[Title('Anibaku')]
 final class Show extends Component
 {
     public Anime $anime;
+
     public int $animeId;
 
     public function mount(Anime $anime): void
@@ -32,7 +38,7 @@ final class Show extends Component
             return Cache::remember(
                 "anime_{$this->animeId}",
                 now()->addWeek(),
-                fn() => app(JikanInterface::class)->getAnimeById($this->animeId)
+                fn () => app(JikanInterface::class)->getAnimeById($this->animeId)
             );
         } catch (NotFoundException $e) {
             abort(404, 'Anime not found');
@@ -49,7 +55,7 @@ final class Show extends Component
             return Cache::remember(
                 "anime_{$this->animeId}_episodes",
                 now()->addDay(),
-                fn() => app(JikanInterface::class)->getAnimeEpisodes($this->animeId)
+                fn () => app(JikanInterface::class)->getAnimeEpisodes($this->animeId)
             );
         } catch (NotFoundException $e) {
             abort(404, 'Episodes not found');
@@ -65,14 +71,12 @@ final class Show extends Component
         return $this->episodes->nextAiring();
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.anime.show', [
             'animeDetails' => $this->animeDetails,
             'episodes' => $this->episodes,
             'nextAiringEpisode' => $this->nextAiringEpisode,
-        ])->layout('components.layouts.guest', [
-            'title' => $this->anime->title . ' - animon.gg',
         ]);
     }
 }

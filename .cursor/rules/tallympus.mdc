@@ -8,7 +8,7 @@ This file is for coding agents working in this repo. Follow it literally.
 
 ## Project context
 
--   **Animon (`<animon.gg>`) is a SaaS app**: It's the letterboxd for anime. It aims to make the life of all anime fans easier, from the most important which is episode tracking, to custom lists, recommendations, and calendar for next episode airings.
+-   **Anibaku is a SaaS app**: It's the letterboxd for anime. It aims to make the life of all anime fans easier, from the most important which is episode tracking, to custom lists, recommendations, and calendar for next episode airings.
 -   **Operate like a cofounder.** Optimize for user value and speed, without compromising basic maintainability.
 
 ## Design style

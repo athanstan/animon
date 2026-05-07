@@ -4,8 +4,13 @@ declare(strict_types=1);
 
 namespace App\Livewire\Anime;
 
+use App\Actions\SyncEpisodesFromJikan;
 use App\Collections\Jikan\EpisodeCollection;
+use App\Enums\EpisodeStatus;
 use App\Interfaces\JikanInterface;
+use App\Models\Episode;
+use App\Models\EpisodeUser;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
@@ -14,29 +19,29 @@ final class Episodes extends Component
 {
     public int $animeId;
 
+    public int $malId;
+
     public int $lastPage = 1;
 
     public array $loadedPages = [];
 
-    public function mount(int $animeId): void
+    public function mount(int $animeId, int $malId): void
     {
         $this->animeId = $animeId;
+        $this->malId = $malId;
 
-        // Step 1: Get pagination info (last page number)
         $pagination = $this->getPaginationFromCache();
         $this->lastPage = $pagination['last_visible_page'] ?? 1;
 
-        // Step 2: Load the LAST page first (newest episodes)
         $this->loadedPages = [$this->lastPage];
     }
 
     public function loadMore(): void
     {
-        if (!$this->hasMorePages) {
+        if (! $this->hasMorePages) {
             return;
         }
 
-        // Load the previous page (older episodes)
         $previousPage = min($this->loadedPages) - 1;
 
         if ($previousPage >= 1) {
@@ -44,26 +49,52 @@ final class Episodes extends Component
         }
     }
 
-    private function getPaginationFromCache(): array
+    public function toggleEpisodeStatus(int $episodeNumber, string $status): void
     {
-        $cacheKey = "anime_{$this->animeId}_episodes_pagination";
+        if (! Auth::check()) {
+            return;
+        }
 
-        return Cache::remember(
-            $cacheKey,
-            now()->addDay(),
-            fn() => app(JikanInterface::class)->getAnimeEpisodesPagination($this->animeId)
-        );
+        $episodeStatus = EpisodeStatus::from($status);
+        $user = Auth::user();
+
+        $episode = Episode::query()
+            ->where('anime_id', $this->animeId)
+            ->where('number', $episodeNumber)
+            ->first();
+
+        if ($episode === null) {
+            return;
+        }
+
+        $existing = $episode->users()
+            ->where('user_id', $user->id)
+            ->first();
+
+        if ($existing !== null && $existing->pivot->status === $episodeStatus->value) {
+            $episode->users()->detach($user->id);
+        } else {
+            $episode->users()->syncWithoutDetaching([
+                $user->id => ['status' => $episodeStatus->value],
+            ]);
+        }
+
+        unset($this->userEpisodeStatuses);
     }
 
-    private function loadPageFromCache(int $page): EpisodeCollection
+    #[Computed]
+    public function userEpisodeStatuses(): array
     {
-        $cacheKey = "anime_{$this->animeId}_episodes_page_{$page}";
+        if (! Auth::check()) {
+            return [];
+        }
 
-        return Cache::remember(
-            $cacheKey,
-            now()->addDay(),
-            fn() => app(JikanInterface::class)->getAnimeEpisodes($this->animeId, $page)
-        );
+        return EpisodeUser::query()
+            ->whereHas('episode', fn ($q) => $q->where('anime_id', $this->animeId))
+            ->where('user_id', Auth::id())
+            ->join('episodes', 'episode_user.episode_id', '=', 'episodes.id')
+            ->pluck('episode_user.status', 'episodes.number')
+            ->all();
     }
 
     #[Computed]
@@ -71,7 +102,6 @@ final class Episodes extends Component
     {
         $allEpisodes = collect();
 
-        // Sort pages from highest to lowest (newest episodes first)
         $sortedPages = collect($this->loadedPages)->sortDesc();
 
         foreach ($sortedPages as $page) {
@@ -79,8 +109,7 @@ final class Episodes extends Component
             $allEpisodes = $allEpisodes->merge($episodes);
         }
 
-        // Sort all episodes by malId descending (episode 100, 99, 98... 1)
-        $sortedEpisodes = $allEpisodes->sortByDesc(fn($episode) => $episode->malId);
+        $sortedEpisodes = $allEpisodes->sortByDesc(fn ($episode) => $episode->malId);
 
         return EpisodeCollection::make($sortedEpisodes->values());
     }
@@ -88,12 +117,37 @@ final class Episodes extends Component
     #[Computed]
     public function hasMorePages(): bool
     {
-        // Check if the lowest loaded page is greater than 1
         return min($this->loadedPages) > 1;
     }
 
     public function render()
     {
         return view('livewire.anime.episodes');
+    }
+
+    private function getPaginationFromCache(): array
+    {
+        $cacheKey = "anime_{$this->malId}_episodes_pagination";
+
+        return Cache::remember(
+            $cacheKey,
+            now()->addDay(),
+            fn () => app(JikanInterface::class)->getAnimeEpisodesPagination($this->malId)
+        );
+    }
+
+    private function loadPageFromCache(int $page): EpisodeCollection
+    {
+        $cacheKey = "anime_{$this->malId}_episodes_page_{$page}";
+
+        $episodes = Cache::remember(
+            $cacheKey,
+            now()->addDay(),
+            fn () => app(JikanInterface::class)->getAnimeEpisodes($this->malId, $page)
+        );
+
+        app(SyncEpisodesFromJikan::class)->execute($this->animeId, $episodes);
+
+        return $episodes;
     }
 }

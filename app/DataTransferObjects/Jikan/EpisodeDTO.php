@@ -71,4 +71,26 @@ final readonly class EpisodeDTO
     {
         return $this->titleRomanji ?? $this->title;
     }
+
+    /**
+     * Convert to array for database insertion.
+     *
+     * @return array{anime_id: int, number: int, title: string, title_japanese: ?string, title_romanji: ?string, aired: ?string, score: ?float, filler: bool, recap: bool, url: ?string, forum_url: ?string}
+     */
+    public function toDatabase(int $animeId): array
+    {
+        return [
+            'anime_id' => $animeId,
+            'number' => $this->malId,
+            'title' => $this->title,
+            'title_japanese' => $this->titleJapanese,
+            'title_romanji' => $this->titleRomanji,
+            'aired' => $this->aired?->toDateTimeString(),
+            'score' => $this->score,
+            'filler' => $this->filler,
+            'recap' => $this->recap,
+            'url' => $this->url,
+            'forum_url' => $this->forumUrl,
+        ];
+    }
 }

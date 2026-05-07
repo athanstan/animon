@@ -1,5 +1,5 @@
 {{--
-    Animon mascot SVG icon - cute anime-style character.
+    Anibaku mascot SVG icon - cute anime-style character.
 --}}
 @props(['class' => 'w-7 h-7'])
 

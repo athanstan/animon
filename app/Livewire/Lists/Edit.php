@@ -8,8 +8,12 @@ use App\Models\Anime;
 use App\Models\AnimeList;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
+#[Layout('components.layouts.guest')]
+#[Title('Edit List - Anibaku')]
 final class Edit extends Component
 {
     public AnimeList $list;
@@ -45,7 +49,7 @@ final class Edit extends Component
     public function getInitialAnimeData(): array
     {
         return $this->list->animes
-            ->map(fn(Anime $anime) => [
+            ->map(fn (Anime $anime) => [
                 'id' => $anime->id,
                 'title' => $anime->title,
                 'score' => $anime->score,
@@ -109,8 +113,6 @@ final class Edit extends Component
 
     public function render(): View
     {
-        return view('livewire.lists.edit')->layout('components.layouts.guest', [
-            'title' => 'Edit List - animon.gg',
-        ]);
+        return view('livewire.lists.edit');
     }
 }

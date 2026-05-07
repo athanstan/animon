@@ -49,6 +49,28 @@
                             {{ $this->episodes->recaps()->count() }} recap
                         </span>
                     @endif
+
+                    @auth
+                        @php
+                            $statuses = $this->userEpisodeStatuses;
+                            $watchedCount = collect($statuses)->filter(fn($s) => $s === 'watched')->count();
+                            $skippedCount = collect($statuses)->filter(fn($s) => $s === 'skipped')->count();
+                        @endphp
+
+                        @if ($watchedCount > 0)
+                            <span class="flex items-center gap-1">
+                                <span class="w-2 h-2 rounded-full bg-green-400"></span>
+                                {{ $watchedCount }} watched
+                            </span>
+                        @endif
+
+                        @if ($skippedCount > 0)
+                            <span class="flex items-center gap-1">
+                                <span class="w-2 h-2 rounded-full bg-orange-400"></span>
+                                {{ $skippedCount }} skipped
+                            </span>
+                        @endif
+                    @endauth
                 </div>
 
                 @if (count($loadedPages) > 0)
@@ -117,6 +139,38 @@
                             </span>
                         @endif
                     </div>
+
+                    <!-- Tracking Buttons -->
+                    @auth
+                        <div class="shrink-0 flex gap-1">
+                            <button
+                                type="button"
+                                wire:click.prevent.stop="toggleEpisodeStatus({{ $episode->malId }}, 'watched')"
+                                wire:loading.attr="disabled"
+                                wire:target="toggleEpisodeStatus({{ $episode->malId }}, 'watched')"
+                                class="p-1.5 rounded-md transition-colors
+                                    {{ ($this->userEpisodeStatuses[$episode->malId] ?? null) === 'watched'
+                                        ? 'bg-green-400/30 text-green-600 border border-green-400/50'
+                                        : 'bg-surface-primary/50 text-text-secondary/40 hover:text-green-500 hover:bg-green-400/10 border border-transparent' }}"
+                                title="Mark as watched"
+                            >
+                                <flux:icon.eye class="w-4 h-4" aria-hidden="true" />
+                            </button>
+                            <button
+                                type="button"
+                                wire:click.prevent.stop="toggleEpisodeStatus({{ $episode->malId }}, 'skipped')"
+                                wire:loading.attr="disabled"
+                                wire:target="toggleEpisodeStatus({{ $episode->malId }}, 'skipped')"
+                                class="p-1.5 rounded-md transition-colors
+                                    {{ ($this->userEpisodeStatuses[$episode->malId] ?? null) === 'skipped'
+                                        ? 'bg-orange-400/30 text-orange-600 border border-orange-400/50'
+                                        : 'bg-surface-primary/50 text-text-secondary/40 hover:text-orange-500 hover:bg-orange-400/10 border border-transparent' }}"
+                                title="Mark as skipped"
+                            >
+                                <flux:icon.forward class="w-4 h-4" aria-hidden="true" />
+                            </button>
+                        </div>
+                    @endauth
 
                     <!-- Arrow Icon -->
                     <div class="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">

@@ -1,7 +1,7 @@
 {{--
     Guest layout for public-facing pages.
 --}}
-@props(['title' => 'animon.gg'])
+@props(['title' => 'Anibaku'])
 
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
@@ -24,11 +24,9 @@
 </head>
 
 <body class="font-kawaii antialiased min-h-screen bg-surface-primary bg-grain bg-blend-overlay text-text-primary"
-    x-data="{ darkMode: localStorage.getItem('darkMode') === 'true' }" x-init="$watch('darkMode', val => {
-        localStorage.setItem('darkMode', val);
-        document.documentElement.classList.toggle('dark', val)
-    });
-    if (darkMode) document.documentElement.classList.add('dark')" x-cloak>
+    x-data="{ darkMode: $persist(false).as('darkMode') }"
+    x-init="$watch('darkMode', val => document.documentElement.classList.toggle('dark', val));
+        if (darkMode) document.documentElement.classList.add('dark')">
     <!-- Decorative Background Blobs -->
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div class="kawaii-blob w-96 h-96 bg-kawaii-pink opacity-30"
@@ -42,15 +40,12 @@
     </div>
 
     <!-- Header -->
-    <header class="relative z-[100] border-b-4 border-border-brutal bg-surface-secondary">
+    <header class="relative z-100 border-b-4 border-border-brutal bg-surface-secondary">
         <div class="container mx-auto px-4 py-3">
             <nav class="flex items-center justify-between gap-4">
                 <!-- Logo -->
                 <a href="/" class="flex items-center gap-2 shrink-0">
-                    <div class="font-display">
-                        <span class="text-xl font-black tracking-tight">animon</span>
-                        <span class="text-xl font-black text-kawaii-coral">.gg</span>
-                    </div>
+                    <x-app-logo />
                 </a>
 
                 <!-- Navigation Links -->
@@ -174,7 +169,7 @@
     </header>
 
     <!-- Main Content -->
-    <main class="relative z-[1]">
+    <main class="relative z-1">
         {{ $slot }}
     </main>
 

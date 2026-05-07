@@ -1,4 +1,4 @@
-<x-layouts.guest title="animon.gg - Your Anime Journey Starts Here">
+<x-layouts.guest title="Anibaku - Your Anime Journey Starts Here">
     @guest
         <!-- Hero Section - Auth Only -->
         @livewire('welcome.hero-with-anime')
@@ -27,7 +27,7 @@
     <section class="relative py-16">
         <div class="container mx-auto px-4">
             <div
-                class="brutal-card rounded-2xl p-8 md:p-12 text-center bg-gradient-to-br from-kawaii-pink to-kawaii-lavender">
+                class="brutal-card rounded-2xl p-8 md:p-12 text-center bg-linear-to-br from-kawaii-pink to-kawaii-lavender">
                 <flux:heading size="2xl" class="font-display font-black mb-4">
                     Ready to level up your anime game? 🚀
                 </flux:heading>
