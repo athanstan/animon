@@ -14,7 +14,7 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::get('/anime/{anime:slug}', AnimeShow::class)
+Route::livewire('/anime/{anime:slug}', AnimeShow::class)
     ->name('anime.show');
 
 Route::view('dashboard', 'dashboard')
@@ -24,11 +24,11 @@ Route::view('dashboard', 'dashboard')
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
 
-    Route::get('settings/profile', Profile::class)->name('profile.edit');
-    Route::get('settings/password', Password::class)->name('user-password.edit');
-    Route::get('settings/appearance', Appearance::class)->name('appearance.edit');
+    Route::livewire('settings/profile', Profile::class)->name('profile.edit');
+    Route::livewire('settings/password', Password::class)->name('user-password.edit');
+    Route::livewire('settings/appearance', Appearance::class)->name('appearance.edit');
 
-    Route::get('settings/two-factor', TwoFactor::class)
+    Route::livewire('settings/two-factor', TwoFactor::class)
         ->middleware(
             when(
                 Features::canManageTwoFactorAuthentication()
@@ -39,6 +39,6 @@ Route::middleware(['auth'])->group(function () {
         )
         ->name('two-factor.show');
 
-    Route::get('list/new', ListsCreate::class)->name('lists.create');
-    Route::get('list/{list:slug}/edit', ListsEdit::class)->name('lists.edit');
+    Route::livewire('list/new', ListsCreate::class)->name('lists.create');
+    Route::livewire('list/{list:slug}/edit', ListsEdit::class)->name('lists.edit');
 });

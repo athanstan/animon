@@ -65,13 +65,14 @@ final class HeroWithAnime extends Component
     public function render()
     {
         $animeList = $this->randomAnime;
-        $findOrCreateAction = new FindOrCreateAnimeFromMalId();
+        $findOrCreateAction = new FindOrCreateAnimeFromMalId;
 
         // Map DTOs to models with slugs
         $animeWithSlugs = $animeList->map(function ($animeDto) use ($findOrCreateAction) {
             $animeModel = $findOrCreateAction->execute($animeDto->malId, $animeDto->title);
 
             return (object) [
+                'malId' => $animeDto->malId,
                 'slug' => $animeModel->slug,
                 'title' => $animeDto->title,
                 'images' => $animeDto->images,

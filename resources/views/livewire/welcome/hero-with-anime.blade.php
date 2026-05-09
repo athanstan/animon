@@ -20,7 +20,8 @@
                 ];
                 $pos = $positions[$index] ?? $positions[0];
             @endphp
-            <div class="absolute {{ $pos['size'] }} brutal-card rounded-xl overflow-hidden opacity-40 hover:opacity-70 transition-all duration-300 hover:scale-110 hover:z-50"
+            <div wire:key="hero-anime-{{ $anime->malId }}"
+                class="absolute {{ $pos['size'] }} brutal-card rounded-xl overflow-hidden opacity-40 hover:opacity-70 transition-all duration-300 hover:scale-110 hover:z-50"
                 style="
                     @if (isset($pos['top'])) top: {{ $pos['top'] }}; @endif
                     @if (isset($pos['bottom'])) bottom: {{ $pos['bottom'] }}; @endif

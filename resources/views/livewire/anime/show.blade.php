@@ -77,6 +77,7 @@
                                     <span class="text-text-secondary text-sm">by</span>
                                     @foreach ($animeDetails->studios as $studio)
                                         <a href="#"
+                                            wire:key="anime-studio-{{ $studio['mal_id'] ?? $studio['name'] }}"
                                             class="font-semibold hover:text-kawaii-coral transition-colors">
                                             {{ $studio['name'] }}
                                         </a>
@@ -100,6 +101,7 @@
                                         <div class="flex flex-wrap gap-2">
                                             @foreach ($animeDetails->genres as $genre)
                                                 <a href="#"
+                                                    wire:key="anime-genre-{{ $genre['mal_id'] ?? $genre['name'] }}"
                                                     class="btn-kawaii px-3 py-1.5 rounded-lg text-sm font-semibold bg-kawaii-pink hover:bg-kawaii-coral transition-colors">
                                                     {{ $genre['name'] }}
                                                 </a>
@@ -117,6 +119,7 @@
                                         <div class="flex flex-wrap gap-2">
                                             @foreach ($animeDetails->themes as $theme)
                                                 <a href="#"
+                                                    wire:key="anime-theme-{{ $theme['mal_id'] ?? $theme['name'] }}"
                                                     class="btn-kawaii px-3 py-1.5 rounded-lg text-sm font-semibold bg-kawaii-lavender hover:bg-kawaii-sage transition-colors">
                                                     {{ $theme['name'] }}
                                                 </a>

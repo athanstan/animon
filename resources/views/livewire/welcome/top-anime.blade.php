@@ -17,6 +17,7 @@
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
             @foreach ($animeList as $index => $anime)
                 <x-welcome.anime-card
+                    wire:key="top-anime-{{ $sectionTitle }}-{{ $anime->malId }}"
                     :title="$anime->title"
                     :score="$anime->score ?? 0"
                     :episodes="$anime->episodes ?? 0"
