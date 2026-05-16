@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Livewire\Anime;
+namespace App\Livewire\Episode;
 
 use App\Actions\SyncEpisode;
 use App\Exceptions\Integrations\Jikan\JikanException;
@@ -13,7 +13,7 @@ use App\Models\Episode;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
-final class EpisodeShow extends Component
+final class ShowEpisode extends Component
 {
     public Anime $anime;
 
@@ -38,7 +38,7 @@ final class EpisodeShow extends Component
     {
         $title = ($this->episode->title_romanji ?? $this->episode->title).' · '.$this->anime->title.' — Anibaku';
 
-        return view('livewire.anime.episode-show', [
+        return view('livewire.episode.show-episode', [
             'anime' => $this->anime,
             'episode' => $this->episode,
         ])->layout('components.layouts.guest', ['title' => $title]);

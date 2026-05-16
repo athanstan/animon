@@ -1,5 +1,5 @@
 {{--
-    Single episode detail page for an anime.
+    Show episode — single episode detail for an anime.
 --}}
 <div class="container mx-auto px-4 py-10 max-w-3xl">
     <nav class="mb-8 text-sm font-bold text-text-secondary">

@@ -1,8 +1,12 @@
 {{--
-    Anime detail page - inspired by Letterboxd's film pages.
+    Show anime page — anime detail inspired by Letterboxd's film pages.
 --}}
 
-<div x-data="{ showGoToTop: false }" x-init="window.addEventListener('scroll', () => { showGoToTop = window.scrollY > 500 })" x-cloak>
+<div
+    x-data="{ showGoToTop: false }"
+    x-init="window.addEventListener('scroll', () => { showGoToTop = window.scrollY > 500 })"
+    x-cloak
+>
     <!-- Hero Section with Backdrop -->
     <section class="relative">
         <!-- Gradient Backdrop -->
@@ -16,13 +20,19 @@
                 <div class="flex-shrink-0 flex flex-col items-center lg:items-start gap-4">
                     <!-- Poster -->
                     <div class="anime-card rounded-2xl overflow-hidden w-64 md:w-72">
-                        <img src="{{ $animeDetails->getLargeImageUrl() }}" alt="Poster for {{ $animeDetails->title }}"
-                            class="w-full aspect-[2/3] object-cover" />
+                        <img
+                            src="{{ $animeDetails->getLargeImageUrl() }}"
+                            alt="Poster for {{ $animeDetails->title }}"
+                            class="w-full aspect-[2/3] object-cover"
+                        />
                     </div>
 
                     <!-- Stats Bar -->
-                    <x-anime.stats-bar :members="$animeDetails->getFormattedMembers()" :favorites="$animeDetails->getFormattedFavorites()" :rank="$animeDetails->rank" />
-
+                    <x-anime.stats-bar
+                        :members="$animeDetails->getFormattedMembers()"
+                        :favorites="$animeDetails->getFormattedFavorites()"
+                        :rank="$animeDetails->rank"
+                    />
                 </div>
 
                 <!-- Info Column -->
@@ -76,7 +86,8 @@
                                 <div class="flex flex-wrap items-center gap-2">
                                     <span class="text-text-secondary text-sm">by</span>
                                     @foreach ($animeDetails->studios as $studio)
-                                        <a href="#"
+                                        <a
+                                            href="#"
                                             wire:key="anime-studio-{{ $studio['mal_id'] ?? $studio['name'] }}"
                                             class="font-semibold hover:text-kawaii-coral transition-colors">
                                             {{ $studio['name'] }}
@@ -100,7 +111,8 @@
                                         </span>
                                         <div class="flex flex-wrap gap-2">
                                             @foreach ($animeDetails->genres as $genre)
-                                                <a href="#"
+                                                <a
+                                                    href="#"
                                                     wire:key="anime-genre-{{ $genre['mal_id'] ?? $genre['name'] }}"
                                                     class="btn-kawaii px-3 py-1.5 rounded-lg text-sm font-semibold bg-kawaii-pink hover:bg-kawaii-coral transition-colors">
                                                     {{ $genre['name'] }}
@@ -118,7 +130,8 @@
                                         </span>
                                         <div class="flex flex-wrap gap-2">
                                             @foreach ($animeDetails->themes as $theme)
-                                                <a href="#"
+                                                <a
+                                                    href="#"
                                                     wire:key="anime-theme-{{ $theme['mal_id'] ?? $theme['name'] }}"
                                                     class="btn-kawaii px-3 py-1.5 rounded-lg text-sm font-semibold bg-kawaii-lavender hover:bg-kawaii-sage transition-colors">
                                                     {{ $theme['name'] }}
@@ -135,7 +148,9 @@
                     <div class="mb-8" x-data="{ activeTab: 'synopsis' }" x-cloak>
                         <!-- Tab Buttons -->
                         <div class="flex gap-2 mb-4">
-                            <button type="button" @click="activeTab = 'synopsis'"
+                            <button
+                                type="button"
+                                @click="activeTab = 'synopsis'"
                                 :class="activeTab === 'synopsis' ? 'bg-kawaii-pink text-text-primary' :
                                     'bg-surface-secondary text-text-secondary hover:bg-surface-secondary/80'"
                                 :aria-selected="activeTab === 'synopsis'"
@@ -144,7 +159,9 @@
                             </button>
 
                             @if ($animeDetails->background)
-                                <button type="button" @click="activeTab = 'background'"
+                                <button
+                                    type="button"
+                                    @click="activeTab = 'background'"
                                     :class="activeTab === 'background' ? 'bg-kawaii-pink text-text-primary' :
                                         'bg-surface-secondary text-text-secondary hover:bg-surface-secondary/80'"
                                     :aria-selected="activeTab === 'background'"
@@ -155,17 +172,22 @@
                         </div>
 
                         <!-- Tab Panels -->
-                        <div x-show="activeTab === 'synopsis'" x-transition:enter="transition ease-out duration-200"
-                            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
+                        <div
+                            x-show="activeTab === 'synopsis'"
+                            x-transition:enter="transition ease-out duration-200"
+                            x-transition:enter-start="opacity-0"
+                            x-transition:enter-end="opacity-100">
                             <flux:text class="text-text-secondary leading-relaxed max-w-3xl">
                                 {{ $animeDetails->synopsis ?? 'No synopsis available.' }}
                             </flux:text>
                         </div>
 
                         @if ($animeDetails->background)
-                            <div x-show="activeTab === 'background'"
+                            <div
+                                x-show="activeTab === 'background'"
                                 x-transition:enter="transition ease-out duration-200"
-                                x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
+                                x-transition:enter-start="opacity-0"
+                                x-transition:enter-end="opacity-100">
                                 <flux:text class="text-text-secondary leading-relaxed max-w-3xl">
                                     {{ $animeDetails->background }}
                                 </flux:text>
@@ -182,14 +204,16 @@
 
                             <div class="brutal-card rounded-2xl overflow-hidden bg-surface-secondary max-w-2xl">
                                 <div class="aspect-video">
-                                    <iframe src="{{ $animeDetails->getTrailerEmbedUrl() }}"
-                                        title="Trailer for {{ $animeDetails->title }}" class="w-full h-full"
-                                        allowfullscreen loading="lazy"></iframe>
+                                    <iframe
+                                        src="{{ $animeDetails->getTrailerEmbedUrl() }}"
+                                        title="Trailer for {{ $animeDetails->title }}"
+                                        class="w-full h-full"
+                                        allowfullscreen
+                                        loading="lazy"></iframe>
                                 </div>
                             </div>
                         </div>
                     @endif
-
                 </div>
 
                 <!-- Sidebar Column -->
@@ -211,22 +235,28 @@
                 📺 Episodes
             </flux:heading>
 
-            <div class="max-w-4xl">
-                <livewire:anime.episodes
-                    :animeId="$anime->id"
-                    :malId="$animeId"
-                    :animeSlug="$anime->slug"
-                    lazy
-                />
-            </div>
+            @island(name: 'list-anime-episodes', lazy: true)
+                <div class="max-w-4xl">
+                    <livewire:anime.list-anime-episodes
+                        :animeId="$anime->id"
+                        :malId="$animeId"
+                        :animeSlug="$anime->slug"
+                    />
+                </div>
+            @endisland
         </div>
     </section>
 
     <!-- Go to Top Button -->
-    <button x-show="showGoToTop" x-transition:enter="transition ease-out duration-200"
-        x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0"
-        x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0"
-        x-transition:leave-end="opacity-0 translate-y-4" @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
+    <button
+        x-show="showGoToTop"
+        x-transition:enter="transition ease-out duration-200"
+        x-transition:enter-start="opacity-0 translate-y-4"
+        x-transition:enter-end="opacity-100 translate-y-0"
+        x-transition:leave="transition ease-in duration-150"
+        x-transition:leave-start="opacity-100 translate-y-0"
+        x-transition:leave-end="opacity-0 translate-y-4"
+        @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
         class="fixed bottom-8 right-8 z-50 btn-kawaii bg-kawaii-pink p-4 rounded-full shadow-brutal-lg hover:scale-110 transition-transform"
         aria-label="Go to top">
         <flux:icon.arrow-up class="w-6 h-6" aria-hidden="true" />

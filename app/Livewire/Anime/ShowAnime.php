@@ -20,7 +20,7 @@ use Livewire\Component;
 
 #[Layout('components.layouts.guest')]
 #[Title('Anibaku')]
-final class Show extends Component
+final class ShowAnime extends Component
 {
     public Anime $anime;
 
@@ -73,7 +73,7 @@ final class Show extends Component
 
     public function render(): View
     {
-        return view('livewire.anime.show', [
+        return view('livewire.anime.show-anime', [
             'animeDetails' => $this->animeDetails,
             'episodes' => $this->episodes,
             'nextAiringEpisode' => $this->nextAiringEpisode,

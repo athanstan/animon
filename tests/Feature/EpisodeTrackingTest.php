@@ -7,7 +7,7 @@ use App\DataTransferObjects\Jikan\EpisodeDTO;
 use App\Enums\EpisodeStatus;
 use App\Exceptions\Integrations\Jikan\NotFoundException;
 use App\Interfaces\JikanInterface;
-use App\Livewire\Anime\Episodes;
+use App\Livewire\Anime\ListAnimeEpisodes;
 use App\Models\Anime;
 use App\Models\Episode;
 use App\Models\EpisodeUser;
@@ -182,7 +182,7 @@ it('toggles episode status to watched for authenticated user', function () {
 
     $this->actingAs($user);
 
-    Livewire::test(Episodes::class, ['animeId' => $anime->id, 'malId' => 100, 'animeSlug' => $anime->slug])
+    Livewire::test(ListAnimeEpisodes::class, ['animeId' => $anime->id, 'malId' => 100, 'animeSlug' => $anime->slug])
         ->call('toggleEpisodeStatus', 1, 'watched');
 
     expect(EpisodeUser::where('user_id', $user->id)->where('episode_id', $episode->id)->first())
@@ -204,7 +204,7 @@ it('toggles off episode status when same status is clicked again', function () {
 
     $this->actingAs($user);
 
-    Livewire::test(Episodes::class, ['animeId' => $anime->id, 'malId' => 101, 'animeSlug' => $anime->slug])
+    Livewire::test(ListAnimeEpisodes::class, ['animeId' => $anime->id, 'malId' => 101, 'animeSlug' => $anime->slug])
         ->call('toggleEpisodeStatus', 1, 'watched')
         ->call('toggleEpisodeStatus', 1, 'watched');
 
@@ -227,7 +227,7 @@ it('changes episode status when toggled with different status', function () {
 
     $this->actingAs($user);
 
-    Livewire::test(Episodes::class, ['animeId' => $anime->id, 'malId' => 102, 'animeSlug' => $anime->slug])
+    Livewire::test(ListAnimeEpisodes::class, ['animeId' => $anime->id, 'malId' => 102, 'animeSlug' => $anime->slug])
         ->call('toggleEpisodeStatus', 1, 'watched')
         ->call('toggleEpisodeStatus', 1, 'skipped');
 
@@ -247,7 +247,7 @@ it('does not track episodes for guest users', function () {
     $jikanMock->shouldReceive('getAnimeEpisodes')->andReturn(new EpisodeCollection);
     app()->instance(JikanInterface::class, $jikanMock);
 
-    Livewire::test(Episodes::class, ['animeId' => $anime->id, 'malId' => 103, 'animeSlug' => $anime->slug])
+    Livewire::test(ListAnimeEpisodes::class, ['animeId' => $anime->id, 'malId' => 103, 'animeSlug' => $anime->slug])
         ->call('toggleEpisodeStatus', 1, 'watched');
 
     expect(EpisodeUser::count())->toBe(0);

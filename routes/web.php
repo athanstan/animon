@@ -1,7 +1,7 @@
 <?php
 
-use App\Livewire\Anime\EpisodeShow as AnimeEpisodeShow;
-use App\Livewire\Anime\Show as AnimeShow;
+use App\Livewire\Anime\ShowAnime;
+use App\Livewire\Episode\ShowEpisode;
 use App\Livewire\Lists\Create as ListsCreate;
 use App\Livewire\Lists\Edit as ListsEdit;
 use App\Livewire\Settings\Appearance;
@@ -15,10 +15,10 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::livewire('/anime/{anime:slug}', AnimeShow::class)
+Route::livewire('/anime/{anime:slug}', ShowAnime::class)
     ->name('anime.show');
 
-Route::livewire('/anime/{anime:slug}/episodes/{number}', AnimeEpisodeShow::class)
+Route::livewire('/anime/{anime:slug}/episodes/{number}', ShowEpisode::class)
     ->name('anime.episodes.show');
 
 Route::view('dashboard', 'dashboard')

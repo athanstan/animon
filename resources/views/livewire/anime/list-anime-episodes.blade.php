@@ -1,5 +1,5 @@
 {{--
-    Episodes list with infinite loading - loads from newest to oldest.
+    List anime episodes — infinite loading from newest to oldest.
 --}}
 <div>
     <!-- Loading Placeholder (shown during lazy load) -->

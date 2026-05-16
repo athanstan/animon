@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Cache;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 
-final class Episodes extends Component
+final class ListAnimeEpisodes extends Component
 {
     public int $animeId;
 
@@ -125,7 +125,7 @@ final class Episodes extends Component
 
     public function render()
     {
-        return view('livewire.anime.episodes');
+        return view('livewire.anime.list-anime-episodes');
     }
 
     private function getPaginationFromCache(): array
