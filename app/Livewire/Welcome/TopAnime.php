@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire\Welcome;
 
-use App\Actions\FindOrCreateAnimeFromMalId;
+use App\Actions\Anime\FindOrCreateAnimeFromMalId;
 use App\Collections\Jikan\AnimeCollection;
 use App\Enums\JikanAnimeType;
 use App\Enums\JikanRating;
@@ -13,6 +13,7 @@ use App\Exceptions\Integrations\Jikan\JikanException;
 use App\Interfaces\JikanInterface;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\Lazy;
 use Livewire\Component;
 
@@ -31,10 +32,8 @@ final class TopAnime extends Component
 
     public string $sectionColor = 'bg-kawaii-coral';
 
-    /**
-     * Get top anime with caching
-     */
-    public function getTopAnimeProperty(): AnimeCollection
+    #[Computed]
+    public function topAnime(): AnimeCollection
     {
         $cacheKey = $this->getCacheKey();
 
@@ -42,7 +41,7 @@ final class TopAnime extends Component
             return Cache::remember(
                 $cacheKey,
                 now()->addDay(),
-                fn() => app(JikanInterface::class)->getTopAnime(
+                fn () => app(JikanInterface::class)->getTopAnime(
                     page: 1,
                     limit: $this->limit,
                     type: $this->type,
@@ -113,13 +112,13 @@ final class TopAnime extends Component
     public function render()
     {
         $animeList = $this->topAnime;
-        $findOrCreateAction = new FindOrCreateAnimeFromMalId();
-        
+        $findOrCreateAction = new FindOrCreateAnimeFromMalId;
+
         // Ensure all anime have slugs by finding or creating them
         $animeList->each(function ($anime) use ($findOrCreateAction) {
             $findOrCreateAction->execute($anime->malId, $anime->title);
         });
-        
+
         return view('livewire.welcome.top-anime', [
             'animeList' => $animeList,
         ]);

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Actions;
+namespace App\Actions\Anime;
 
 use App\Collections\Jikan\EpisodeCollection;
 use App\Models\Episode;

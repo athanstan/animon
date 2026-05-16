@@ -1,7 +1,7 @@
 <?php
 
+use App\Actions\Anime\SyncEpisodesFromJikan;
 use App\Actions\SyncEpisode;
-use App\Actions\SyncEpisodesFromJikan;
 use App\Collections\Jikan\EpisodeCollection;
 use App\DataTransferObjects\Jikan\EpisodeDTO;
 use App\Enums\EpisodeStatus;

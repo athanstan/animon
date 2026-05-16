@@ -4,23 +4,22 @@ declare(strict_types=1);
 
 namespace App\Livewire\Welcome;
 
-use App\Actions\FindOrCreateAnimeFromMalId;
+use App\Actions\Anime\FindOrCreateAnimeFromMalId;
 use App\Collections\Jikan\AnimeCollection;
 use App\Enums\JikanAnimeType;
 use App\Exceptions\Integrations\Jikan\JikanException;
 use App\Interfaces\JikanInterface;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\Lazy;
 use Livewire\Component;
 
 #[Lazy]
 final class HeroWithAnime extends Component
 {
-    /**
-     * Get random top anime for scattered display
-     */
-    public function getRandomAnimeProperty(): AnimeCollection
+    #[Computed]
+    public function randomAnime(): AnimeCollection
     {
         $cacheKey = 'hero_random_anime';
 

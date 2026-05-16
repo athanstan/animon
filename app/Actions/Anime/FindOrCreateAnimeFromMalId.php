@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Actions;
+namespace App\Actions\Anime;
 
 use App\Models\Anime;
 use Illuminate\Support\Str;

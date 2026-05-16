@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace App\Livewire\Anime;
 
-use App\Actions\SyncEpisodesFromJikan;
+use App\Actions\Anime\GetAnimeEpisodes;
+use App\Actions\Anime\SyncEpisodesFromJikan;
 use App\Collections\Jikan\EpisodeCollection;
 use App\Enums\EpisodeStatus;
 use App\Interfaces\JikanInterface;
@@ -26,6 +27,13 @@ final class ListAnimeEpisodes extends Component
     public int $lastPage = 1;
 
     public array $loadedPages = [];
+
+    protected GetAnimeEpisodes $getAnimeEpisodes;
+
+    public function boot(GetAnimeEpisodes $getAnimeEpisodes): void
+    {
+        $this->getAnimeEpisodes = $getAnimeEpisodes;
+    }
 
     public function mount(int $animeId, int $malId, string $animeSlug): void
     {
@@ -141,13 +149,7 @@ final class ListAnimeEpisodes extends Component
 
     private function loadPageFromCache(int $page): EpisodeCollection
     {
-        $cacheKey = "anime_{$this->malId}_episodes_page_{$page}";
-
-        $episodes = Cache::remember(
-            $cacheKey,
-            now()->addDay(),
-            fn () => app(JikanInterface::class)->getAnimeEpisodes($this->malId, $page)
-        );
+        $episodes = $this->getAnimeEpisodes->execute($this->malId, $page);
 
         app(SyncEpisodesFromJikan::class)->execute($this->animeId, $episodes);
 
