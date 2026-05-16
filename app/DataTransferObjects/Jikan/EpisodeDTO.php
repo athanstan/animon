@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\DataTransferObjects\Jikan;
 
 use Carbon\Carbon;
+use Throwable;
 
 final readonly class EpisodeDTO
 {
@@ -19,24 +20,30 @@ final readonly class EpisodeDTO
         public bool $filler,
         public bool $recap,
         public ?string $forumUrl,
+        public ?string $duration,
+        public ?string $synopsis,
     ) {}
 
     /**
      * Map API response to DTO.
+     *
+     * @param  array<string, mixed>  $data
      */
     public static function fromResponse(array $data): self
     {
         return new self(
-            malId: $data['mal_id'],
+            malId: (int) $data['mal_id'],
             url: $data['url'] ?? null,
-            title: $data['title'],
+            title: isset($data['title']) ? (string) $data['title'] : '',
             titleJapanese: $data['title_japanese'] ?? null,
             titleRomanji: $data['title_romanji'] ?? null,
-            aired: isset($data['aired']) ? Carbon::parse($data['aired']) : null,
-            score: $data['score'] ?? null,
-            filler: $data['filler'] ?? false,
-            recap: $data['recap'] ?? false,
+            aired: self::parseAired($data['aired'] ?? null),
+            score: isset($data['score']) ? (float) $data['score'] : null,
+            filler: (bool) ($data['filler'] ?? false),
+            recap: (bool) ($data['recap'] ?? false),
             forumUrl: $data['forum_url'] ?? null,
+            duration: self::normalizeOptionalString($data['duration'] ?? null),
+            synopsis: isset($data['synopsis']) ? (is_string($data['synopsis']) ? $data['synopsis'] : null) : null,
         );
     }
 
@@ -75,7 +82,7 @@ final readonly class EpisodeDTO
     /**
      * Convert to array for database insertion.
      *
-     * @return array{anime_id: int, number: int, title: string, title_japanese: ?string, title_romanji: ?string, aired: ?string, score: ?float, filler: bool, recap: bool, url: ?string, forum_url: ?string}
+     * @return array<string, mixed>
      */
     public function toDatabase(int $animeId): array
     {
@@ -91,6 +98,30 @@ final readonly class EpisodeDTO
             'recap' => $this->recap,
             'url' => $this->url,
             'forum_url' => $this->forumUrl,
+            'duration' => $this->duration,
+            'synopsis' => $this->synopsis,
         ];
+    }
+
+    private static function parseAired(mixed $aired): ?Carbon
+    {
+        if ($aired === null || $aired === '') {
+            return null;
+        }
+
+        try {
+            return Carbon::parse($aired);
+        } catch (Throwable) {
+            return null;
+        }
+    }
+
+    private static function normalizeOptionalString(mixed $value): ?string
+    {
+        if ($value === null || $value === '') {
+            return null;
+        }
+
+        return is_string($value) ? $value : (string) $value;
     }
 }

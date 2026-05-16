@@ -27,6 +27,8 @@ final class Episode extends Model
         'recap',
         'url',
         'forum_url',
+        'duration',
+        'synopsis',
     ];
 
     protected function casts(): array

@@ -27,6 +27,8 @@ final class EpisodeFactory extends Factory
             'recap' => fake()->boolean(5),
             'url' => fake()->optional()->url(),
             'forum_url' => fake()->optional()->url(),
+            'duration' => fake()->optional()->randomElement(['24m', '23 min', null]),
+            'synopsis' => fake()->optional()->sentence(8),
         ];
     }
 

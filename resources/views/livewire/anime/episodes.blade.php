@@ -84,61 +84,67 @@
         <!-- Minimal Episode List -->
         <div class="space-y-2" wire:loading.class="opacity-60">
             @foreach ($this->episodes as $episode)
-                <a href="{{ $episode->url }}" target="_blank" rel="noopener noreferrer"
-                    wire:key="episode-{{ $episode->malId }}"
-                    class="flex items-center gap-4 px-4 py-3 rounded-lg border-2 border-border-brutal/20 bg-surface-secondary hover:bg-surface-primary hover:border-border-brutal/40 transition-all group">
-                    <!-- Episode Number -->
-                    <div class="shrink-0 w-12 text-center">
-                        <span
-                            class="text-lg font-black text-text-primary group-hover:text-kawaii-pink transition-colors">
-                            {{ $episode->malId }}
-                        </span>
-                    </div>
+                <div wire:key="episode-{{ $episode->malId }}"
+                    class="flex items-center gap-2 px-4 py-3 rounded-lg border-2 border-border-brutal/20 bg-surface-secondary hover:bg-surface-primary hover:border-border-brutal/40 transition-all group">
+                    <a href="{{ route('anime.episodes.show', ['anime' => $animeSlug, 'number' => $episode->malId]) }}" wire:navigate
+                        class="flex flex-1 items-center gap-4 min-w-0">
+                        <!-- Episode Number -->
+                        <div class="shrink-0 w-12 text-center">
+                            <span
+                                class="text-lg font-black text-text-primary group-hover:text-kawaii-pink transition-colors">
+                                {{ $episode->malId }}
+                            </span>
+                        </div>
 
-                    <!-- Episode Info -->
-                    <div class="flex-1 min-w-0">
-                        <h4
-                            class="font-semibold text-sm text-text-primary truncate group-hover:text-kawaii-coral transition-colors">
-                            {{ $episode->getDisplayTitle() }}
-                        </h4>
-                        <div class="flex items-center gap-3 mt-0.5 text-xs text-text-secondary">
-                            <span>{{ $episode->getFormattedAiredDate() }}</span>
+                        <!-- Episode Info -->
+                        <div class="flex-1 min-w-0">
+                            <h4
+                                class="font-semibold text-sm text-text-primary truncate group-hover:text-kawaii-coral transition-colors">
+                                {{ $episode->getDisplayTitle() }}
+                            </h4>
+                            <div class="flex items-center gap-3 mt-0.5 text-xs text-text-secondary">
+                                <span>{{ $episode->getFormattedAiredDate() }}</span>
 
-                            @if ($episode->score)
-                                <span class="flex items-center gap-1">
-                                    <flux:icon.star class="w-3 h-3 text-kawaii-coral" aria-hidden="true" />
-                                    {{ $episode->getFormattedScore() }}
+                                @if ($episode->score)
+                                    <span class="flex items-center gap-1">
+                                        <flux:icon.star class="w-3 h-3 text-kawaii-coral" aria-hidden="true" />
+                                        {{ $episode->getFormattedScore() }}
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <!-- Badges -->
+                        <div class="shrink-0 flex gap-2">
+                            @if ($episode->filler)
+                                <span
+                                    class="px-2 py-1 rounded text-xs font-bold bg-amber-400/20 text-amber-600 border border-amber-400/40"
+                                    title="Filler Episode">
+                                    Filler
+                                </span>
+                            @endif
+
+                            @if ($episode->recap)
+                                <span
+                                    class="px-2 py-1 rounded text-xs font-bold bg-blue-400/20 text-blue-600 border border-blue-400/40"
+                                    title="Recap Episode">
+                                    Recap
+                                </span>
+                            @endif
+
+                            @if (!$episode->hasAired())
+                                <span
+                                    class="px-2 py-1 rounded text-xs font-bold bg-kawaii-lavender/30 text-text-secondary border border-border-brutal/20"
+                                    title="Not yet aired">
+                                    Upcoming
                                 </span>
                             @endif
                         </div>
-                    </div>
 
-                    <!-- Badges -->
-                    <div class="shrink-0 flex gap-2">
-                        @if ($episode->filler)
-                            <span
-                                class="px-2 py-1 rounded text-xs font-bold bg-amber-400/20 text-amber-600 border border-amber-400/40"
-                                title="Filler Episode">
-                                Filler
-                            </span>
-                        @endif
-
-                        @if ($episode->recap)
-                            <span
-                                class="px-2 py-1 rounded text-xs font-bold bg-blue-400/20 text-blue-600 border border-blue-400/40"
-                                title="Recap Episode">
-                                Recap
-                            </span>
-                        @endif
-
-                        @if (!$episode->hasAired())
-                            <span
-                                class="px-2 py-1 rounded text-xs font-bold bg-kawaii-lavender/30 text-text-secondary border border-border-brutal/20"
-                                title="Not yet aired">
-                                Upcoming
-                            </span>
-                        @endif
-                    </div>
+                        <div class="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" aria-hidden="true">
+                            <flux:icon.chevron-right class="w-4 h-4 text-kawaii-pink" />
+                        </div>
+                    </a>
 
                     <!-- Tracking Buttons -->
                     @auth
@@ -172,11 +178,14 @@
                         </div>
                     @endauth
 
-                    <!-- Arrow Icon -->
-                    <div class="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <flux:icon.arrow-top-right-on-square class="w-4 h-4 text-kawaii-pink" aria-hidden="true" />
-                    </div>
-                </a>
+                    @if ($episode->url)
+                        <a href="{{ $episode->url }}" target="_blank" rel="noopener noreferrer"
+                            class="shrink-0 p-2 rounded-lg text-text-secondary hover:text-kawaii-pink hover:bg-surface-primary/50 transition-colors"
+                            title="Open on MyAnimeList">
+                            <flux:icon.arrow-top-right-on-square class="w-4 h-4" aria-hidden="true" />
+                        </a>
+                    @endif
+                </div>
             @endforeach
         </div>
 

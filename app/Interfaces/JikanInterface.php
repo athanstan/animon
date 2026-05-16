@@ -7,6 +7,7 @@ namespace App\Interfaces;
 use App\Collections\Jikan\AnimeCollection;
 use App\Collections\Jikan\EpisodeCollection;
 use App\DataTransferObjects\Jikan\AnimeDTO;
+use App\DataTransferObjects\Jikan\EpisodeDTO;
 use App\Enums\JikanAnimeType;
 use App\Enums\JikanRating;
 use App\Enums\TopAnimeFilter;
@@ -15,11 +16,7 @@ interface JikanInterface
 {
     public function getAnimeById(int $id): AnimeDTO;
 
-    public function getAnime(
-        int $page = 1,
-        int $limit = 25,
-        bool $sfw = true
-    ): AnimeCollection;
+    public function getAnime(int $page = 1, int $limit = 25, bool $sfw = true): AnimeCollection;
 
     public function getTopAnime(
         int $page = 1,
@@ -30,12 +27,9 @@ interface JikanInterface
         bool $sfw = true
     ): AnimeCollection;
 
-    public function getAnimeEpisodes(
-        int $animeId,
-        int $page = 1
-    ): EpisodeCollection;
+    public function getAnimeEpisodes(int $animeId, int $page = 1): EpisodeCollection;
 
-    public function getAnimeEpisodesPagination(
-        int $animeId
-    ): array;
+    public function getEpisode(int $animeMalId, int $episodeNumber): EpisodeDTO;
+
+    public function getAnimeEpisodesPagination(int $animeId): array;
 }

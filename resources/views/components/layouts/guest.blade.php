@@ -12,9 +12,8 @@
 
     <title>{{ $title }}</title>
 
-    <link rel="icon" href="/favicon.ico" sizes="any" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="icon" href="{{ asset('assets/anibaku.ico') }}" sizes="any" type="image/x-icon" />
+    <link rel="icon" href="{{ asset('assets/anibaku.svg') }}" type="image/svg+xml" />
 
     <link rel="preconnect" href="https://fonts.bunny.net" />
     <link href="https://fonts.bunny.net/css?family=nunito:400,600,700,800,900|zen-maru-gothic:400,500,700,900"

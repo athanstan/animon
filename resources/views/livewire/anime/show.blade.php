@@ -212,7 +212,12 @@
             </flux:heading>
 
             <div class="max-w-4xl">
-                <livewire:anime.episodes :animeId="$anime->id" :malId="$animeId" lazy />
+                <livewire:anime.episodes
+                    :animeId="$anime->id"
+                    :malId="$animeId"
+                    :animeSlug="$anime->slug"
+                    lazy
+                />
             </div>
         </div>
     </section>

@@ -21,14 +21,17 @@ final class Episodes extends Component
 
     public int $malId;
 
+    public string $animeSlug;
+
     public int $lastPage = 1;
 
     public array $loadedPages = [];
 
-    public function mount(int $animeId, int $malId): void
+    public function mount(int $animeId, int $malId, string $animeSlug): void
     {
         $this->animeId = $animeId;
         $this->malId = $malId;
+        $this->animeSlug = $animeSlug;
 
         $pagination = $this->getPaginationFromCache();
         $this->lastPage = $pagination['last_visible_page'] ?? 1;

@@ -7,17 +7,15 @@ namespace App\Services;
 use App\Collections\Jikan\AnimeCollection;
 use App\Collections\Jikan\EpisodeCollection;
 use App\DataTransferObjects\Jikan\AnimeDTO;
+use App\DataTransferObjects\Jikan\EpisodeDTO;
 use App\Enums\JikanAnimeType;
 use App\Enums\JikanRating;
 use App\Enums\TopAnimeFilter;
-use App\Exceptions\Integrations\Jikan\JikanException;
-use App\Exceptions\Integrations\Jikan\NotFoundException;
-use App\Exceptions\Integrations\Jikan\RateLimitException;
-use App\Exceptions\Integrations\Jikan\UnauthorizedException;
 use App\Http\Integrations\Jikan\JikanConnector;
 use App\Http\Integrations\Jikan\Requests\GetAnime;
 use App\Http\Integrations\Jikan\Requests\GetAnimeEpisodes;
 use App\Http\Integrations\Jikan\Requests\GetAnimeList;
+use App\Http\Integrations\Jikan\Requests\GetEpisode;
 use App\Http\Integrations\Jikan\Requests\GetTopAnime;
 use App\Interfaces\JikanInterface;
 
@@ -31,6 +29,7 @@ final readonly class Jikan implements JikanInterface
         int $id
     ): AnimeDTO {
         $request = new GetAnime($id);
+
         return $this->connector->send($request)->dtoOrFail();
     }
 
@@ -84,6 +83,13 @@ final readonly class Jikan implements JikanInterface
         $response = $this->connector->send($request);
 
         return $request->createDtoFromResponse($response);
+    }
+
+    public function getEpisode(int $animeMalId, int $episodeNumber): EpisodeDTO
+    {
+        $request = new GetEpisode($animeMalId, $episodeNumber);
+
+        return $this->connector->send($request)->dtoOrFail();
     }
 
     public function getAnimeEpisodesPagination(

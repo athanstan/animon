@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Anime\EpisodeShow as AnimeEpisodeShow;
 use App\Livewire\Anime\Show as AnimeShow;
 use App\Livewire\Lists\Create as ListsCreate;
 use App\Livewire\Lists\Edit as ListsEdit;
@@ -16,6 +17,9 @@ Route::get('/', function () {
 
 Route::livewire('/anime/{anime:slug}', AnimeShow::class)
     ->name('anime.show');
+
+Route::livewire('/anime/{anime:slug}/episodes/{number}', AnimeEpisodeShow::class)
+    ->name('anime.episodes.show');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
@@ -39,6 +43,6 @@ Route::middleware(['auth'])->group(function () {
         )
         ->name('two-factor.show');
 
-    Route::livewire('list/new', ListsCreate::class)->name('lists.create');
-    Route::livewire('list/{list:slug}/edit', ListsEdit::class)->name('lists.edit');
+    Route::livewire('lists/create', ListsCreate::class)->name('lists.create');
+    Route::livewire('lists/{list:slug}/edit', ListsEdit::class)->name('lists.edit');
 });

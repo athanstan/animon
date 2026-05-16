@@ -23,7 +23,19 @@ final class SyncEpisodesFromJikan
         Episode::upsert(
             $records,
             uniqueBy: ['anime_id', 'number'],
-            update: ['title', 'title_japanese', 'title_romanji', 'aired', 'score', 'filler', 'recap', 'url', 'forum_url'],
+            update: [
+                'title',
+                'title_japanese',
+                'title_romanji',
+                'aired',
+                'score',
+                'filler',
+                'recap',
+                'url',
+                'forum_url',
+                'duration',
+                'synopsis',
+            ],
         );
     }
 }
