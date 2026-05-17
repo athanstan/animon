@@ -1,6 +1,7 @@
 <?php
 
 use App\Exceptions\Anime\AnimePageException;
+use App\Exceptions\User\UserException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -17,6 +18,14 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->render(function (AnimePageException $e, Request $request) {
+            if ($request->expectsJson()) {
+                return response()->json(['message' => $e->getMessage()], $e->statusCode());
+            }
+
+            abort($e->statusCode(), $e->getMessage());
+        });
+
+        $exceptions->render(function (UserException $e, Request $request) {
             if ($request->expectsJson()) {
                 return response()->json(['message' => $e->getMessage()], $e->statusCode());
             }
