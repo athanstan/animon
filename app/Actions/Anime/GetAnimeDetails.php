@@ -12,6 +12,7 @@ use App\Exceptions\Integrations\Jikan\JikanException;
 use App\Exceptions\Integrations\Jikan\NotFoundException;
 use App\Exceptions\Integrations\Jikan\RateLimitException;
 use App\Interfaces\JikanInterface;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 
 final readonly class GetAnimeDetails
@@ -29,10 +30,11 @@ final readonly class GetAnimeDetails
      */
     public function execute(int $malId): AnimeDTO
     {
+        // TODO: Check the DB for the anime details first, if not found, dispatch a job to sync from Jikan and cache data.
         try {
             return Cache::remember(
                 "anime_{$malId}",
-                now()->addWeek(),
+                Carbon::now()->addWeek(),
                 fn (): AnimeDTO => $this->jikan->getAnimeById($malId)
             );
         } catch (NotFoundException $e) {

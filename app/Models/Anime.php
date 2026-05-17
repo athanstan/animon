@@ -68,6 +68,14 @@ final class Anime extends Model
         return $this->hasMany(Episode::class);
     }
 
+    public function libraryUsers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'user_anime_libraries')
+            ->using(UserAnimeLibrary::class)
+            ->withPivot('status')
+            ->withTimestamps();
+    }
+
     public function animeLists(): BelongsToMany
     {
         return $this->belongsToMany(AnimeList::class, 'anime_anime_lists')

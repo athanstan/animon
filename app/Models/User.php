@@ -72,6 +72,14 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
+    public function libraryAnimes(): BelongsToMany
+    {
+        return $this->belongsToMany(Anime::class, 'user_anime_libraries')
+            ->using(UserAnimeLibrary::class)
+            ->withPivot('status')
+            ->withTimestamps();
+    }
+
     public function animeLists(): HasMany
     {
         return $this->hasMany(AnimeList::class);
